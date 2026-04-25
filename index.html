@@ -2,143 +2,190 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hogan Golf Grip Checklist</title>
-    <meta name="theme-color" content="#2d5a27">
-    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     
+    <title>Ben Hogan - 5 Lessons Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0d1117">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1099/1099680.png">
+
     <style>
-        :root {
-            --primary: #2d5a27;
-            --bg: #f4f7f6;
-            --text: #333;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: var(--primary);
-            font-size: 1.5rem;
-            text-align: center;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 10px;
-        }
-        h2 {
-            font-size: 1.1rem;
-            margin-top: 20px;
-            color: #555;
-        }
-        .checklist-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .checklist-item:last-child { border-bottom: none; }
-        input[type="checkbox"] {
-            width: 22px;
-            height: 22px;
-            margin-right: 15px;
-            cursor: pointer;
-            accent-color: var(--primary);
-        }
-        label { flex: 1; cursor: pointer; font-size: 0.95rem; }
-        .note {
-            background: #e8f5e9;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            margin-top: 20px;
-            border-left: 4px solid var(--primary);
-        }
-        .timer {
-            text-align: center;
-            font-weight: bold;
-            color: var(--primary);
-            margin: 15px 0;
-            padding: 10px;
-            border: 1px dashed var(--primary);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: #0d1117; color: #e0e6ed; }
+        .lesson-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; transition: all 0.3s; }
+        .lesson-card.active { border-color: #58a6ff; background: #0d47a1; }
+        .phase-card { background: rgba(255,255,255,0.05); border-radius: 15px; padding: 1rem; margin-bottom: 1rem; border: 1px solid #30363d; }
+        .numpad-btn { background: #21262d; border-radius: 12px; font-size: 1.5rem; font-weight: 800; padding: 1rem; }
+        .numpad-btn:active { background: #58a6ff; color: #0d1117; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .modal-overlay.active { display: flex; }
+        #copy-helper { position: absolute; left: -9999px; opacity: 0; }
     </style>
 </head>
 <body>
+    <textarea id="copy-helper" readonly></textarea>
 
-<div class="container">
-    <h1>🏌️ Hogan Grip Checklist</h1>
-    
-    <div class="timer">Mục tiêu: 30 phút mỗi ngày [cite: 108]</div>
+    <div id="app" class="max-w-2xl mx-auto px-4 pb-32">
+        <div id="dashboard">
+            <div class="text-center py-10">
+                <h1 class="text-4xl font-black italic tracking-tighter italic uppercase">BEN HOGAN</h1>
+                <p class="text-blue-500 font-bold text-xs tracking-[0.3em]">5 LESSONS TRACKER</p>
+            </div>
 
-    <h2>1. Tay Trái (Tay không thuận) [cite: 101]</h2>
-    <div class="checklist-item">
-        <input type="checkbox" id="l1">
-        <label for="l1">Gậy chạy ngang đốt trong cùng ngón trỏ & tỳ vào mu bàn tay [cite: 103]</label>
-    </div>
-    <div class="checklist-item">
-        <input type="checkbox" id="l2">
-        <label for="l2">Lực giữ chính ở 3 ngón: út, áp út, ngón giữa [cite: 110]</label>
-    </div>
-    <div class="checklist-item">
-        <input type="checkbox" id="l3">
-        <label for="l3">Đỉnh chữ V (ngón cái & trỏ) chỉ thẳng vào mắt phải [cite: 111]</label>
-    </div>
+            <div class="space-y-4" id="lesson-menu"></div>
+        </div>
 
-    <h2>2. Tay Phải (Tay thuận) [cite: 123]</h2>
-    <div class="checklist-item">
-        <input type="checkbox" id="r1">
-        <label for="r1">Gậy nằm hoàn toàn ở các ngón tay (không vào lòng bàn tay) [cite: 133, 139]</label>
-    </div>
-    <div class="checklist-item">
-        <input type="checkbox" id="r2">
-        <label for="r2">Ngón út đặt chồng lên khe ngón trỏ & giữa tay trái [cite: 136, 145]</label>
-    </div>
-    <div class="checklist-item">
-        <input type="checkbox" id="r3">
-        <label for="r3">Đỉnh chữ V chỉ thẳng vào cằm [cite: 157]</label>
+        <div id="lesson-detail" class="hidden">
+            <button onclick="showDashboard()" class="text-blue-500 font-bold mb-6 flex items-center gap-2">← Back to Menu</button>
+            <h2 id="current-lesson-title" class="text-3xl font-black uppercase italic mb-2"></h2>
+            <div id="phases-list"></div>
+        </div>
+
+        <div class="fixed bottom-0 left-0 right-0 p-5 bg-[#0d1117]/90 backdrop-blur-md border-t border-gray-800 flex gap-4 z-50">
+            <button onclick="copyFullSession()" class="flex-1 bg-blue-600 text-white font-black py-4 rounded-2xl uppercase tracking-widest">Copy Full Log</button>
+            <button onclick="resetApp()" class="bg-red-900/30 text-red-500 px-6 rounded-2xl font-bold">Reset</button>
+        </div>
     </div>
 
-    <h2>3. Kiểm tra sự gắn kết [cite: 156]</h2>
-    <div class="checklist-item">
-        <input type="checkbox" id="c1">
-        <label for="c1">Ngón cái trái nằm lọt khít trong lòng bàn tay phải [cite: 153, 155]</label>
-    </div>
-    <div class="checklist-item">
-        <input type="checkbox" id="c2">
-        <label for="c2">Hai tay hoạt động như một thể thống nhất [cite: 98, 167]</label>
+    <div id="entry-modal" class="modal-overlay">
+        <div class="bg-[#161b22] border-2 border-blue-500 rounded-[30px] p-6 w-full max-w-[400px]">
+            <div class="flex justify-between mb-4"><span id="modal-step" class="text-blue-500 font-black text-xs">STEP 1/11</span><button onclick="closeModal()">CANCEL</button></div>
+            <h2 id="modal-field" class="text-3xl font-black uppercase text-center mb-4 italic">CARRY</h2>
+            <div class="bg-black py-6 rounded-2xl mb-6 text-center border border-blue-900"><span id="display-val" class="text-6xl font-black text-blue-400">0</span></div>
+            <div class="grid grid-cols-3 gap-3">
+                <button class="numpad-btn" onclick="press('7')">7</button><button class="numpad-btn" onclick="press('8')">8</button><button class="numpad-btn" onclick="press('9')">9</button>
+                <button class="numpad-btn" onclick="press('4')">4</button><button class="numpad-btn" onclick="press('5')">5</button><button class="numpad-btn" onclick="press('6')">6</button>
+                <button class="numpad-btn" onclick="press('1')">1</button><button class="numpad-btn" onclick="press('2')">2</button><button class="numpad-btn" onclick="press('3')">3</button>
+                <button class="numpad-btn" onclick="press('.')">.</button><button class="numpad-btn" onclick="press('0')">0</button><button class="numpad-btn" onclick="press('-')">-</button>
+                <button class="numpad-btn bg-red-900/50 text-white col-span-1" onclick="press('C')">DEL</button>
+                <button class="numpad-btn bg-green-600 text-white col-span-2" onclick="press('N')">NEXT →</button>
+            </div>
+        </div>
     </div>
 
-    <div class="note">
-        <strong>💡 Bài tập của Hogan:</strong> Tập vung gậy mà không để ngón trỏ và ngón cái tay phải chạm vào thân gậy để cảm nhận sự gắn kết[cite: 163, 167].
-    </div>
-</div>
+    <script>
+        const DATA = {
+            fields: ['Carry','Total','BS','Smash','CP','FP','LP','AA','LA','Land','SR'],
+            lessons: [
+                { id: 1, title: "The Grip", desc: "Nền tảng của sức mạnh và sự chính xác.", phases: [
+                    { name: "Neutral Grip Check", drills: ["Overlap/Interlock", "V-Shape to Right Shoulder"] },
+                    { name: "Pressure Points", drills: ["Last 3 fingers left hand", "2 middle fingers right hand"] }
+                ]},
+                { id: 2, title: "Stance & Posture", desc: "Sự cân bằng và tạo không gian cho cú swing.", phases: [
+                    { name: "Width of Stance", drills: ["Irons vs Woods width", "Right foot square, Left open 22°"] },
+                    { name: "Body Tilt", drills: ["Spine tilt", "Knee flex and hip hinge"] }
+                ]},
+                { id: 3, title: "The First Part of Swing", desc: "Backswing: Tích lũy năng lượng.", phases: [
+                    { name: "One-piece Takeaway", drills: ["Arms and shoulders triangle", "Hip turn restriction"] },
+                    { name: "Top of Swing", drills: ["Left wrist flat", "Right elbow pointing down"] }
+                ]},
+                { id: 4, title: "The Second Part of Swing", desc: "Downswing: Giải phóng sức mạnh.", phases: [
+                    { name: "Hip Initiation", desc: "Shift weight to left", "Rotate left hip back" },
+                    { name: "Impact Position", desc: "Shaft lean", "Eyes on ball behind impact" }
+                ]},
+                { id: 5, title: "Summary & Review", desc: "Kết nối mọi yếu tố.", phases: [
+                    { name: "Full Sequence", drills: ["Tempo 3:1", "Full finish and balance"] },
+                    { name: "Specific Clubs", drills: ["7 Iron control", "Driver AoA check"] }
+                ]}
+            ]
+        };
 
-<script>
-    // Đăng ký Service Worker cho PWA
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js');
-    }
+        let db = JSON.parse(localStorage.getItem('BenHoganTracker')) || { activeLesson: 0, shots: {}, drills: {} };
+        let inputState = { step: 0, buffer: "", lessonId: null, phaseIdx: null, data: {} };
 
-    // Lưu trạng thái checklist vào LocalStorage
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(cb => {
-        const id = cb.id;
-        cb.checked = localStorage.getItem(id) === 'true';
-        cb.addEventListener('change', () => {
-            localStorage.setItem(id, cb.checked);
-        });
-    });
-</script>
+        function renderDashboard() {
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('lesson-detail').classList.add('hidden');
+            const menu = document.getElementById('lesson-menu');
+            menu.innerHTML = DATA.lessons.map(l => `
+                <div onclick="showLesson(${l.id})" class="lesson-card p-6 flex justify-between items-center active:scale-95 cursor-pointer">
+                    <div>
+                        <h3 class="font-black italic uppercase text-lg">Lesson ${l.id}: ${l.title}</h3>
+                        <p class="text-xs text-gray-500">${l.desc}</p>
+                    </div>
+                    <span class="text-blue-500">→</span>
+                </div>
+            `).join('');
+        }
+
+        function showLesson(id) {
+            const lesson = DATA.lessons.find(l => l.id === id);
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('lesson-detail').classList.remove('hidden');
+            document.getElementById('current-lesson-title').innerText = `Lesson ${lesson.id}: ${lesson.title}`;
+            
+            const list = document.getElementById('phases-list');
+            list.innerHTML = lesson.phases.map((p, pIdx) => `
+                <div class="phase-card">
+                    <h4 class="font-black uppercase text-sm mb-3 text-blue-400">${p.name}</h4>
+                    <div class="space-y-2 mb-4">${p.drills.map(d => `<div class="text-[10px] opacity-60">● ${d}</div>`).join('')}</div>
+                    <button onclick="openModal(${lesson.id}, ${pIdx})" class="w-full py-3 bg-white text-black font-black rounded-xl uppercase text-xs">🎯 Log Shot</button>
+                    <div class="mt-3 space-y-1">${(db.shots[`${lesson.id}-${pIdx}`] || []).map(s => `
+                        <div class="text-[9px] bg-black/40 p-2 rounded border border-white/5 flex justify-between">
+                            <span>${s}</span>
+                            <button onclick="copySingle('${btoa(s)}')" class="text-blue-500 font-bold">COPY</button>
+                        </div>
+                    `).join('')}</div>
+                </div>
+            `).join('');
+        }
+
+        function openModal(lId, pIdx) {
+            inputState = { step: 0, buffer: "", lessonId: lId, phaseIdx: pIdx, data: {} };
+            document.getElementById('entry-modal').classList.add('active');
+            updateModal();
+        }
+
+        function press(k) {
+            if(k==='C') inputState.buffer = "";
+            else if(k==='N') {
+                let f = DATA.fields[inputState.step];
+                let val = inputState.buffer || "0";
+                if(f==='LP') val += "A";
+                inputState.data[f] = val;
+                if(inputState.step < 10) { inputState.step++; inputState.buffer = ""; updateModal(); }
+                else { saveShot(); }
+            } else { if(inputState.buffer.length < 6) inputState.buffer += k; }
+            document.getElementById('display-val').innerText = inputState.buffer || "0";
+        }
+
+        function saveShot() {
+            const key = `${inputState.lessonId}-${inputState.phaseIdx}`;
+            const str = DATA.fields.map(f => `${f}:${inputState.data[f]}`).join(" ");
+            if(!db.shots[key]) db.shots[key] = [];
+            db.shots[key].unshift(str);
+            localStorage.setItem('BenHoganTracker', JSON.stringify(db));
+            closeModal(); showLesson(inputState.lessonId);
+        }
+
+        function updateModal() {
+            document.getElementById('modal-step').innerText = `STEP ${inputState.step+1}/11`;
+            document.getElementById('modal-field').innerText = DATA.fields[inputState.step];
+            document.getElementById('display-val').innerText = "0";
+        }
+
+        function copySingle(b) {
+            const helper = document.getElementById('copy-helper');
+            helper.value = atob(b); helper.select(); helper.setSelectionRange(0, 9999);
+            document.execCommand('copy'); alert("Copied shot!");
+        }
+
+        function copyFullSession() {
+            const txt = Object.entries(db.shots).map(([k, v]) => `L-${k}:\n${v.join('\n')}`).join('\n\n');
+            const helper = document.getElementById('copy-helper');
+            helper.value = txt; helper.select(); document.execCommand('copy');
+            alert("Copied all logs!");
+        }
+
+        function showDashboard() { renderDashboard(); }
+        function closeModal() { document.getElementById('entry-modal').classList.remove('active'); }
+        function resetApp() { if(confirm("Reset everything?")) { localStorage.clear(); location.reload(); } }
+
+        renderDashboard();
+    </script>
 </body>
 </html>
