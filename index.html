@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Ben Hogan Mastery</title>
+    <title>Ben Hogan - 5 Bài Học Cơ Bản</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; }
         body { font-family: -apple-system, system-ui, sans-serif; background: #0d1117; color: #e0e6ed; }
-        .lesson-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 1.5rem; margin-bottom: 1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .lesson-card:active { transform: scale(0.98); background: #1c2128; }
-        .phase-card { background: rgba(255,255,255,0.05); border-radius: 15px; padding: 1rem; margin-bottom: 1rem; border: 1px solid #30363d; }
+        .lesson-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 1.5rem; margin-bottom: 1rem; cursor: pointer; }
+        .phase-card { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 1.25rem; margin-bottom: 1.5rem; border: 1px solid #30363d; }
         .numpad-btn { background: #21262d; border-radius: 12px; font-size: 1.5rem; font-weight: 800; padding: 1.25rem 0.5rem; color: #f0f6fc; }
         .numpad-btn:active { background: #58a6ff; color: #0d1117; }
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
@@ -25,27 +24,27 @@
         <div id="dashboard">
             <div class="text-center py-10">
                 <h1 class="text-4xl font-black italic tracking-tighter uppercase">BEN HOGAN</h1>
-                <p class="text-blue-500 font-bold text-xs tracking-[0.3em]">5 LESSONS TRACKER</p>
+                <p class="text-blue-500 font-bold text-xs tracking-[0.3em]">5 BÀI HỌC CƠ BẢN</p>
             </div>
-            <div class="space-y-4" id="lesson-menu">
-                </div>
+            <div class="space-y-4" id="lesson-menu"></div>
         </div>
 
         <div id="lesson-detail" class="hidden pt-6">
-            <button onclick="showDashboard()" class="text-blue-500 font-bold mb-6 flex items-center gap-2">← Back to Menu</button>
-            <h2 id="current-lesson-title" class="text-3xl font-black uppercase italic mb-6"></h2>
+            <button onclick="showDashboard()" class="text-blue-400 font-black mb-6 flex items-center gap-2">← QUAY LẠI MENU</button>
+            <h2 id="current-lesson-title" class="text-3xl font-black uppercase italic mb-2 text-white"></h2>
+            <p id="current-lesson-desc" class="text-gray-500 text-xs mb-8 font-bold uppercase tracking-widest"></p>
             <div id="phases-list"></div>
         </div>
 
         <div class="fixed bottom-0 left-0 right-0 p-5 bg-[#0d1117]/90 backdrop-blur-md border-t border-gray-800 flex gap-4 z-50">
-            <button onclick="copyFullSession()" class="flex-1 bg-blue-600 text-white font-black py-4 rounded-2xl uppercase tracking-widest">Copy Full Log</button>
-            <button onclick="resetApp()" class="bg-red-900/30 text-red-500 px-6 rounded-2xl font-bold">Reset</button>
+            <button onclick="copyFullSession()" class="flex-1 bg-blue-600 text-white font-black py-4 rounded-2xl uppercase text-sm tracking-widest">SAO CHÉP TẤT CẢ</button>
+            <button onclick="resetApp()" class="bg-red-900/30 text-red-500 px-6 rounded-2xl font-bold border border-red-900/50">XÓA</button>
         </div>
     </div>
 
     <div id="entry-modal" class="modal-overlay">
         <div class="bg-[#161b22] border-2 border-blue-500 rounded-[30px] p-6 w-full max-w-[400px]">
-            <div class="flex justify-between mb-4"><span id="modal-step" class="text-blue-500 font-black text-xs uppercase">Step 1/11</span><button onclick="closeModal()" class="text-gray-500">CANCEL</button></div>
+            <div class="flex justify-between mb-4"><span id="modal-step" class="text-blue-500 font-black text-xs">BƯỚC 1/11</span><button onclick="closeModal()" class="text-gray-500">HỦY</button></div>
             <h2 id="modal-field" class="text-3xl font-black uppercase text-center mb-4 italic text-white">CARRY</h2>
             <div class="bg-black py-6 rounded-2xl mb-6 text-center border border-blue-900"><span id="display-val" class="text-6xl font-black text-blue-400">0</span></div>
             <div class="grid grid-cols-3 gap-3">
@@ -53,8 +52,8 @@
                 <button class="numpad-btn" onclick="press('4')">4</button><button class="numpad-btn" onclick="press('5')">5</button><button class="numpad-btn" onclick="press('6')">6</button>
                 <button class="numpad-btn" onclick="press('1')">1</button><button class="numpad-btn" onclick="press('2')">2</button><button class="numpad-btn" onclick="press('3')">3</button>
                 <button class="numpad-btn" onclick="press('.')">.</button><button class="numpad-btn" onclick="press('0')">0</button><button class="numpad-btn" onclick="press('-')">-</button>
-                <button class="numpad-btn bg-red-900/50 text-white" onclick="press('C')">DEL</button>
-                <button class="numpad-btn bg-green-600 text-white col-span-2" onclick="press('N')">NEXT →</button>
+                <button class="numpad-btn bg-red-900/50 text-white" onclick="press('C')">XÓA</button>
+                <button class="numpad-btn bg-green-600 text-white col-span-2" onclick="press('N')">TIẾP THEO →</button>
             </div>
         </div>
     </div>
@@ -63,15 +62,30 @@
         const DATA = {
             fields: ['Carry','Total','BS','Smash','CP','FP','LP','AA','LA','Land','SR'],
             lessons: [
-                { id: 1, title: "The Grip", desc: "Nền tảng của sức mạnh và sự chính xác.", phases: [{ name: "Neutral Grip Check", drills: ["Overlap/Interlock", "V-Shape Check"] }, { name: "Pressure Points", drills: ["Last 3 fingers left", "2 middle fingers right"] }] },
-                { id: 2, title: "Stance & Posture", desc: "Sự cân bằng và tạo không gian.", phases: [{ name: "Width & Alignment", drills: ["Feet width", "Foot flare angle"] }, { name: "Spine & Knees", drills: ["Hip hinge", "Knee flex"] }] },
-                { id: 3, title: "The First Part", desc: "Backswing: Tích lũy năng lượng.", phases: [{ name: "Takeaway", drills: ["Shoulder turn", "Arm triangle"] }, { name: "Top Position", drills: ["Left wrist flat", "Elbow position"] }] },
-                { id: 4, title: "The Second Part", desc: "Downswing: Giải phóng sức mạnh.", phases: [{ name: "The Initiation", drills: ["Hip shift", "Hip rotation"] }, { name: "Impact", drills: ["Shaft lean", "Head position"] }] },
-                { id: 5, title: "Summary", desc: "Kết nối mọi yếu tố.", phases: [{ name: "Full Sequence", drills: ["Tempo 3:1", "Balance finish"] }, { name: "Club Control", drills: ["7 Iron Mastery", "Driver AoA"] }] }
+                { id: 1, title: "CÁCH CẦM GẬY (THE GRIP)", desc: "Mối liên kết duy nhất giữa bạn và gậy.", phases: [
+                    { name: "Kiểm tra tay trái", hd: "Đặt gậy chéo qua các đốt ngón tay, không đặt vào lòng bàn tay. Khi nhìn xuống thấy 2-3 khớp xương ngón tay.", goal: "Tạo sự linh hoạt cho cổ tay." },
+                    { name: "Kiểm tra tay phải", hd: "Lòng bàn tay phải áp sát ngón cái tay trái. Ngón trỏ tạo hình móc câu.", goal: "Tạo sức mạnh và cảm giác bóng." }
+                ]},
+                { id: 2, title: "THẾ ĐỨNG & TƯ THẾ", desc: "Tạo nền móng vững chắc cho cú Swing.", phases: [
+                    { name: "Độ rộng chân", hd: "Chân rộng bằng vai. Chân phải vuông góc, chân trái mở nhẹ 22 độ.", goal: "Cân bằng và hỗ trợ xoay hông." },
+                    { name: "Góc nghiêng cơ thể", hd: "Gập từ hông, lưng thẳng, đầu gối hơi chùng. Cột sống nghiêng nhẹ sang phải.", goal: "Tạo không gian cho tay vung." }
+                ]},
+                { id: 3, title: "BACKSWING", desc: "Tích lũy năng lượng.", phases: [
+                    { name: "Takeaway", hd: "Tay, vai và gậy di chuyển cùng lúc như một khối tam giác.", goal: "Đưa gậy đi đúng quỹ đạo rộng." },
+                    { name: "Đỉnh Swing", hd: "Cổ tay trái phẳng, khuỷu tay phải hướng xuống đất. Vai xoay tối đa.", goal: "Nạp năng lượng cực đại." }
+                ]},
+                { id: 4, title: "DOWNSWING", desc: "Giải phóng sức mạnh.", phases: [
+                    { name: "Khởi động bằng hông", hd: "Hông trái xoay mở về phía mục tiêu trước khi tay chuyển động xuống.", goal: "Tạo lực kéo cực mạnh từ dưới lên." },
+                    { name: "Vị trí Impact", hd: "Cán gậy nghiêng về trước bóng, hông mở, mắt nhìn sau bóng.", goal: "Nén bóng tối ưu (Compression)." }
+                ]},
+                { id: 5, title: "TỔNG KẾT & KIỂM TRA", desc: "Đồng bộ hóa mọi chuyển động.", phases: [
+                    { name: "Tempo 3:1", hd: "Backswing chậm (3 nhịp), Downswing nhanh (1 nhịp).", goal: "Tạo nhịp điệu mượt mà." },
+                    { name: "Kiểm soát gậy sắt 7", hd: "Đánh 10 quả tập trung vào điểm rơi đáy gậy (Low Point).", goal: "Mọi cú đánh đều đạt LP Ahead (chữ A)." }
+                ]}
             ]
         };
 
-        let db = JSON.parse(localStorage.getItem('BenHoganTrackerV4')) || { shots: {} };
+        let db = JSON.parse(localStorage.getItem('BenHoganV5')) || { shots: {} };
         let inputState = { step: 0, buffer: "", lessonId: null, phaseIdx: null, data: {} };
 
         function renderDashboard() {
@@ -79,33 +93,37 @@
             document.getElementById('lesson-detail').style.display = 'none';
             const menu = document.getElementById('lesson-menu');
             menu.innerHTML = DATA.lessons.map(l => `
-                <div onclick="showLesson(${l.id})" class="lesson-card">
+                <div onclick="showLesson(${l.id})" class="lesson-card flex justify-between items-center active:scale-95 transition-all">
                     <div>
-                        <h3 class="font-black italic uppercase text-lg">Lesson ${l.id}: ${l.title}</h3>
-                        <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">${l.desc}</p>
+                        <h3 class="font-black italic uppercase text-lg text-white">Bài ${l.id}: ${l.title}</h3>
+                        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">${l.desc}</p>
                     </div>
-                    <span class="text-blue-500 font-bold">→</span>
+                    <span class="text-blue-500">→</span>
                 </div>
             `).join('');
         }
 
         function showLesson(id) {
-            const lesson = DATA.lessons.find(l => l.id === id);
+            const l = DATA.lessons.find(lesson => lesson.id === id);
             document.getElementById('dashboard').style.display = 'none';
             document.getElementById('lesson-detail').style.display = 'block';
-            document.getElementById('current-lesson-title').innerText = `Lesson ${lesson.id}: ${lesson.title}`;
+            document.getElementById('current-lesson-title').innerText = l.title;
+            document.getElementById('current-lesson-desc').innerText = l.desc;
             
             const list = document.getElementById('phases-list');
-            list.innerHTML = lesson.phases.map((p, pIdx) => `
+            list.innerHTML = l.phases.map((p, pIdx) => `
                 <div class="phase-card">
-                    <h4 class="font-black uppercase text-sm mb-4 text-blue-400">Step: ${p.name}</h4>
-                    <div class="space-y-2 mb-6">${p.drills.map(d => `<div class="text-[11px] font-bold opacity-50 uppercase tracking-tighter">● ${d}</div>`).join('')}</div>
-                    <button onclick="openModal(${lesson.id}, ${pIdx})" class="w-full py-4 bg-white text-black font-black rounded-2xl uppercase text-xs shadow-lg active:scale-95 transition-all">🎯 Log Performance</button>
+                    <h4 class="font-black uppercase text-sm mb-4 text-blue-400">Giai đoạn: ${p.name}</h4>
+                    <div class="bg-black/30 p-4 rounded-xl border border-white/5 mb-6">
+                        <p class="text-[11px] text-gray-300 leading-relaxed mb-2 italic">📌 HD: ${p.hd}</p>
+                        <p class="text-[11px] text-green-500 font-bold">🎯 MỤC TIÊU: ${p.goal}</p>
+                    </div>
+                    <button onclick="openModal(${l.id}, ${pIdx})" class="w-full py-4 bg-white text-black font-black rounded-2xl uppercase text-xs shadow-lg active:scale-95 transition-all">🎯 GHI THÔNG SỐ CÚ ĐÁNH</button>
                     <div class="mt-4 space-y-2">
-                        ${(db.shots[`${lesson.id}-${pIdx}`] || []).map(s => `
+                        ${(db.shots[`${l.id}-${pIdx}`] || []).map(s => `
                             <div class="text-[10px] bg-black/50 p-3 rounded-xl border border-white/5 flex justify-between items-center font-mono">
                                 <span class="opacity-80">${s}</span>
-                                <button onclick="copySingle('${btoa(s)}')" class="text-blue-500 font-black ml-4">COPY</button>
+                                <button onclick="copySingle('${btoa(s)}')" class="text-blue-500 font-black ml-4 uppercase">Copy</button>
                             </div>
                         `).join('')}
                     </div>
@@ -137,12 +155,12 @@
             const str = DATA.fields.map(f => `${f}:${inputState.data[f]}`).join(" ");
             if(!db.shots[key]) db.shots[key] = [];
             db.shots[key].unshift(str);
-            localStorage.setItem('BenHoganTrackerV4', JSON.stringify(db));
+            localStorage.setItem('BenHoganV5', JSON.stringify(db));
             closeModal(); showLesson(inputState.lessonId);
         }
 
         function updateModal() {
-            document.getElementById('modal-step').innerText = `Step ${inputState.step+1}/11`;
+            document.getElementById('modal-step').innerText = `BƯỚC ${inputState.step+1}/11`;
             document.getElementById('modal-field').innerText = DATA.fields[inputState.step];
             document.getElementById('display-val').innerText = "0";
         }
@@ -154,17 +172,16 @@
         }
 
         function copyFullSession() {
-            const txt = Object.entries(db.shots).map(([k, v]) => `L-${k}:\n${v.join('\n')}`).join('\n\n');
+            const txt = Object.entries(db.shots).map(([k, v]) => `BÀI TẬP ${k}:\n${v.join('\n')}`).join('\n\n');
             const helper = document.getElementById('copy-helper');
             helper.value = txt; helper.select(); document.execCommand('copy');
-            alert("Copied all logs!");
+            alert("Đã sao chép toàn bộ nhật ký tập luyện!");
         }
 
         function showDashboard() { renderDashboard(); }
         function closeModal() { document.getElementById('entry-modal').classList.remove('active'); }
-        function resetApp() { if(confirm("Reset everything?")) { localStorage.clear(); location.reload(); } }
+        function resetApp() { if(confirm("Xóa toàn bộ dữ liệu?")) { localStorage.clear(); location.reload(); } }
 
-        // Khởi chạy ngay lập tức
         renderDashboard();
     </script>
 </body>
