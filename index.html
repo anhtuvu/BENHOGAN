@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Ben Hogan Pro Mastery</title>
+    <title>Ben Hogan Pro - Safe Zone Fixed</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,50 +11,65 @@
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1099/1099680.png">
 
     <style>
-        /* 1. CHỐNG SCROLL & TỐI ƯU PWA */
+        /* CHỐNG SCROLL TOÀN TRANG & XỬ LÝ TAI THỎ */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; }
+        
+        :root {
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
+        }
+
         html, body { 
             height: 100%; 
-            overflow: hidden; /* Khóa scroll chính */
+            overflow: hidden; 
             background: #0d1117; 
             color: #e0e6ed; 
             font-family: -apple-system, system-ui, sans-serif;
         }
 
-        .app-container {
+        .app-layout {
             display: flex;
             flex-direction: column;
             height: 100vh;
-            padding-bottom: env(safe-area-inset-bottom);
+            /* Đẩy toàn bộ app xuống dưới tai thỏ */
+            padding-top: var(--safe-top);
+            padding-bottom: var(--safe-bottom);
         }
 
-        /* Khu vực nội dung có thể scroll riêng */
-        .scroll-content {
+        /* Header cố định trong vùng an toàn */
+        .sticky-header {
+            padding: 1rem;
+            background: #0d1117;
+            border-bottom: 1px solid #30363d;
+            z-index: 100;
+        }
+
+        /* Vùng nội dung có thể cuộn */
+        .scroll-container {
             flex: 1;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             padding: 1rem;
         }
 
+        /* UI Components */
         .lesson-card { 
             background: #161b22; border: 1px solid #30363d; border-radius: 20px; 
-            padding: 1.25rem; margin-bottom: 1rem; cursor: pointer; transition: 0.2s;
+            padding: 1.25rem; margin-bottom: 1rem; cursor: pointer;
         }
         .lesson-card.mastered { border-color: #238636; background: rgba(35, 134, 54, 0.1); }
+        .phase-card { background: rgba(255,255,255,0.05); border-radius: 22px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid #30363d; }
         
-        .phase-card { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 1.25rem; margin-bottom: 1.5rem; border: 1px solid #30363d; }
-        
-        /* Checkbox Custom */
         .check-box {
-            width: 24px; height: 24px; border: 2px solid #58a6ff; border-radius: 6px;
-            display: flex; align-items: center; justify-content: center;
+            width: 26px; height: 26px; border: 2px solid #58a6ff; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-        .check-box.checked { background: #58a6ff; }
+        .check-box.checked { background: #58a6ff; border-color: #58a6ff; }
 
-        /* Modal Numpad */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        /* Numpad Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(12px); }
         .modal-overlay.active { display: flex; }
-        .numpad-btn { background: #21262d; border-radius: 12px; font-size: 1.5rem; font-weight: 800; padding: 1rem; color: #f0f6fc; }
+        .numpad-btn { background: #21262d; border-radius: 14px; font-size: 1.5rem; font-weight: 800; padding: 1.25rem 0.5rem; color: #f0f6fc; }
         
         #copy-helper { position: absolute; left: -9999px; opacity: 0; }
     </style>
@@ -62,50 +77,56 @@
 <body>
     <textarea id="copy-helper" readonly></textarea>
 
-    <div class="app-container">
-        <div class="scroll-content" id="main-scroll">
+    <div class="app-layout">
+        
+        <div id="nav-header" class="sticky-header hidden">
+            <div class="flex justify-between items-center">
+                <button onclick="showDashboard()" class="text-blue-500 font-black text-xs tracking-tighter">← MENU</button>
+                <div class="flex gap-2">
+                    <button id="prev-btn" class="bg-gray-800 px-4 py-2 rounded-xl text-[10px] font-black uppercase">Bài Trước</button>
+                    <button id="next-btn" class="bg-gray-800 px-4 py-2 rounded-xl text-[10px] font-black uppercase">Bài Tiếp</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-container" id="main-content">
             
             <div id="dashboard">
-                <div class="text-center py-10">
-                    <h1 class="text-4xl font-black italic uppercase italic">BEN HOGAN</h1>
-                    <p class="text-blue-500 font-bold text-[10px] tracking-[0.4em]">5 LESSONS TRACKER</p>
+                <div class="text-center py-8">
+                    <h1 class="text-4xl font-black italic uppercase tracking-tighter text-white">BEN HOGAN</h1>
+                    <p class="text-blue-500 font-bold text-[10px] tracking-[0.4em] mt-1">5 LESSONS TRACKER</p>
                 </div>
                 <div class="space-y-3" id="lesson-menu"></div>
             </div>
 
             <div id="lesson-detail" class="hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <button onclick="showDashboard()" class="text-blue-500 font-bold text-xs">← MENU</button>
-                    <div class="flex gap-2">
-                        <button id="prev-btn" class="bg-gray-800 px-3 py-1 rounded-lg text-[10px] font-bold">BÀI TRƯỚC</button>
-                        <button id="next-btn" class="bg-gray-800 px-3 py-1 rounded-lg text-[10px] font-bold">BÀI TIẾP</button>
-                    </div>
+                <div class="mb-6">
+                    <h2 id="current-title" class="text-3xl font-black uppercase italic text-white leading-tight"></h2>
+                    <p id="current-desc" class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mt-1"></p>
                 </div>
-                <h2 id="current-title" class="text-3xl font-black uppercase italic mb-1"></h2>
-                <p id="current-desc" class="text-gray-500 text-[10px] mb-8 font-bold uppercase tracking-widest"></p>
                 <div id="phases-list"></div>
             </div>
 
         </div>
 
         <div class="p-4 bg-[#0d1117] border-t border-gray-800 flex gap-3">
-            <button onclick="copyFullSession()" class="flex-1 bg-blue-600 text-white font-black py-4 rounded-2xl uppercase text-xs tracking-widest">Copy Nhật Ký</button>
-            <button onclick="resetApp()" class="bg-red-900/30 text-red-500 px-6 rounded-2xl font-bold border border-red-900/50">Xóa</button>
+            <button onclick="copyFullSession()" class="flex-1 bg-blue-600 text-white font-black py-4 rounded-2xl uppercase text-xs tracking-widest active:scale-95 transition-transform shadow-lg">Copy Nhật Ký</button>
+            <button onclick="resetApp()" class="bg-red-900/20 text-red-500 px-6 rounded-2xl font-bold border border-red-900/30 italic">XÓA</button>
         </div>
     </div>
 
     <div id="entry-modal" class="modal-overlay">
-        <div class="bg-[#161b22] border-2 border-blue-500 rounded-[30px] p-6 w-full max-w-[380px]">
-            <div class="flex justify-between mb-4"><span id="modal-step" class="text-blue-500 font-black text-xs">STEP 1/11</span><button onclick="closeModal()">HỦY</button></div>
-            <h2 id="modal-field" class="text-3xl font-black uppercase text-center mb-4 italic">CARRY</h2>
-            <div class="bg-black py-6 rounded-2xl mb-6 text-center border border-blue-900"><span id="display-val" class="text-6xl font-black text-blue-400">0</span></div>
+        <div class="bg-[#161b22] border-2 border-blue-500 rounded-[35px] p-6 w-full max-w-[380px] mx-4">
+            <div class="flex justify-between mb-4 text-gray-500 font-bold text-xs"><span id="modal-step" class="text-blue-500">STEP 1/11</span><button onclick="closeModal()">HỦY</button></div>
+            <h2 id="modal-field" class="text-3xl font-black uppercase text-center mb-4 italic text-white">CARRY</h2>
+            <div class="bg-black py-6 rounded-3xl mb-6 text-center border border-blue-900"><span id="display-val" class="text-6xl font-black text-blue-400">0</span></div>
             <div class="grid grid-cols-3 gap-3">
                 <button class="numpad-btn" onclick="press('7')">7</button><button class="numpad-btn" onclick="press('8')">8</button><button class="numpad-btn" onclick="press('9')">9</button>
                 <button class="numpad-btn" onclick="press('4')">4</button><button class="numpad-btn" onclick="press('5')">5</button><button class="numpad-btn" onclick="press('6')">6</button>
                 <button class="numpad-btn" onclick="press('1')">1</button><button class="numpad-btn" onclick="press('2')">2</button><button class="numpad-btn" onclick="press('3')">3</button>
                 <button class="numpad-btn" onclick="press('.')">.</button><button class="numpad-btn" onclick="press('0')">0</button><button class="numpad-btn" onclick="press('-')">-</button>
-                <button class="numpad-btn bg-red-900/50" onclick="press('C')">DEL</button>
-                <button class="numpad-btn bg-green-600 col-span-2" onclick="press('N')">NEXT →</button>
+                <button class="numpad-btn bg-red-900/40" onclick="press('C')">DEL</button>
+                <button class="numpad-btn bg-green-600 col-span-2 text-white" onclick="press('N')">TIẾP THEO →</button>
             </div>
         </div>
     </div>
@@ -114,33 +135,34 @@
         const DATA = {
             fields: ['Carry','Total','BS','Smash','CP','FP','LP','AA','LA','Land','SR'],
             lessons: [
-                { id: 1, title: "CÁCH CẦM GẬY", desc: "Mối liên kết duy nhất.", phases: [{name: "Tay Trái", hd: "Đặt gậy chéo các đốt ngón tay.", goal: "Cổ tay linh hoạt."}, {name: "Tay Phải", hd: "Lòng bàn tay phải áp ngón cái trái.", goal: "Tạo lực kéo."}] },
-                { id: 2, title: "THẾ ĐỨNG", desc: "Nền móng vững chắc.", phases: [{name: "Độ rộng chân", hd: "Rộng bằng vai, chân trái mở 22°.", goal: "Cân bằng xoay hông."}, {name: "Góc nghiêng", hd: "Gập từ hông, cột sống nghiêng phải.", goal: "Tạo không gian vung."}] },
-                { id: 3, title: "BACKSWING", desc: "Tích lũy năng lượng.", phases: [{name: "Takeaway", hd: "Tay và vai đi cùng nhau.", goal: "Quỹ đạo rộng."}, {name: "Đỉnh Swing", hd: "Cổ tay phẳng, khuỷu tay hướng xuống.", goal: "Nạp lực tối đa."}] },
-                { id: 4, title: "DOWNSWING", desc: "Giải phóng sức mạnh.", phases: [{name: "Xoay hông", hd: "Hông trái mở trước khi tay xuống.", goal: "Lực kéo từ dưới lên."}, {name: "Impact", hd: "Cán gậy nghiêng trước, hông mở.", goal: "Nén bóng (Compression)."}] },
-                { id: 5, title: "TỔNG KẾT", desc: "Đồng bộ chuyển động.", phases: [{name: "Nhịp điệu 3:1", hd: "Lên chậm, xuống nhanh.", goal: "Mượt mà."}, {name: "Sắt 7 Mastery", hd: "Kiểm soát Low Point Ahead.", goal: "Tiếp xúc bóng sạch."}] }
+                { id: 1, title: "CÁCH CẦM GẬY", desc: "Nền tảng sức mạnh.", phases: [{name: "Tay Trái", hd: "Đặt gậy chéo ngón tay, không để vào lòng bàn tay.", goal: "Cổ tay linh hoạt."}, {name: "Tay Phải", hd: "Lòng bàn tay phải áp sát ngón cái trái.", goal: "Kiểm soát hướng gậy."}] },
+                { id: 2, title: "THẾ ĐỨNG", desc: "Cân bằng vững chãi.", phases: [{name: "Độ rộng chân", hd: "Rộng bằng vai. Chân trái mở 22 độ.", goal: "Hỗ trợ xoay hông."}, {name: "Góc nghiêng", hd: "Gập từ hông, cột sống nghiêng phải nhẹ.", goal: "Tạo không gian swing."}] },
+                { id: 3, title: "BACKSWING", desc: "Tích lũy năng lượng.", phases: [{name: "Takeaway", hd: "Tay và vai di chuyển như một tam giác.", goal: "Vòng swing rộng."}, {name: "Đỉnh Swing", hd: "Cổ tay phẳng, khuỷu tay hướng xuống đất.", goal: "Nạp lực tối đa."}] },
+                { id: 4, title: "DOWNSWING", desc: "Giải phóng lực.", phases: [{name: "Xoay hông", hd: "Hông trái mở về mục tiêu trước khi tay xuống.", goal: "Lực kéo từ dưới lên."}, {name: "Impact", hd: "Cán gậy nghiêng trước, mắt nhìn sau bóng.", goal: "Nén bóng (Compression)."}] },
+                { id: 5, title: "TỔNG KẾT", desc: "Đồng bộ chuyển động.", phases: [{name: "Nhịp điệu 3:1", hd: "Lên chậm (3 nhịp), xuống nhanh (1 nhịp).", goal: "Nhịp điệu mượt mà."}, {name: "Sắt 7 Mastery", hd: "Kiểm soát điểm rơi đáy gậy (LP Ahead).", goal: "Tiếp xúc bóng sạch."}] }
             ]
         };
 
-        let db = JSON.parse(localStorage.getItem('HoganApp_V6')) || { shots: {}, mastered: [], currentLessonId: 1 };
+        let db = JSON.parse(localStorage.getItem('HoganApp_V7')) || { shots: {}, mastered: [], currentLessonId: 1 };
         let inputState = { step: 0, buffer: "", lessonId: null, phaseIdx: null, data: {} };
 
         function renderDashboard() {
             document.getElementById('dashboard').style.display = 'block';
             document.getElementById('lesson-detail').style.display = 'none';
+            document.getElementById('nav-header').classList.add('hidden');
             const menu = document.getElementById('lesson-menu');
             menu.innerHTML = DATA.lessons.map(l => `
-                <div class="lesson-card ${db.mastered.includes(l.id) ? 'mastered' : ''} flex justify-between items-center" onclick="showLesson(${l.id})">
+                <div class="lesson-card ${db.mastered.includes(l.id) ? 'mastered' : ''} flex justify-between items-center shadow-md active:scale-95 transition-all" onclick="showLesson(${l.id})">
                     <div class="flex items-center gap-4">
                         <div class="check-box ${db.mastered.includes(l.id) ? 'checked' : ''}" onclick="event.stopPropagation(); toggleMastery(${l.id})">
-                            ${db.mastered.includes(l.id) ? '✓' : ''}
+                            ${db.mastered.includes(l.id) ? '<span class="text-white text-sm font-bold">✓</span>' : ''}
                         </div>
                         <div>
-                            <h3 class="font-black italic uppercase text-sm">${l.id}. ${l.title}</h3>
-                            <p class="text-[9px] text-gray-500 uppercase font-bold">${l.desc}</p>
+                            <h3 class="font-black italic uppercase text-sm text-gray-200">Bài ${l.id}. ${l.title}</h3>
+                            <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest">${l.desc}</p>
                         </div>
                     </div>
-                    <span class="text-blue-500">→</span>
+                    <span class="text-blue-500 font-black">→</span>
                 </div>
             `).join('');
         }
@@ -150,10 +172,10 @@
             db.currentLessonId = id; save();
             document.getElementById('dashboard').style.display = 'none';
             document.getElementById('lesson-detail').style.display = 'block';
-            document.getElementById('current-title').innerText = `BÀI ${l.id}: ${l.title}`;
+            document.getElementById('nav-header').classList.remove('hidden');
+            document.getElementById('current-title').innerText = `${l.title}`;
             document.getElementById('current-desc').innerText = l.desc;
             
-            // Điều hướng
             document.getElementById('prev-btn').onclick = () => id > 1 && showLesson(id - 1);
             document.getElementById('next-btn').onclick = () => id < 5 && showLesson(id + 1);
             document.getElementById('prev-btn').style.opacity = id === 1 ? "0.2" : "1";
@@ -162,20 +184,23 @@
             const list = document.getElementById('phases-list');
             list.innerHTML = l.phases.map((p, pIdx) => `
                 <div class="phase-card">
-                    <h4 class="font-black uppercase text-[11px] mb-3 text-blue-400 italic">Giai đoạn: ${p.name}</h4>
-                    <div class="text-[10px] text-gray-400 mb-4 leading-relaxed bg-black/20 p-3 rounded-lg border border-white/5">
-                        📌 ${p.hd} <br> <span class="text-green-500 font-bold">🎯 ${p.goal}</span>
+                    <h4 class="font-black uppercase text-[11px] mb-3 text-blue-400 italic tracking-tighter">Giai đoạn: ${p.name}</h4>
+                    <div class="text-[11px] text-gray-400 mb-5 leading-relaxed bg-black/30 p-4 rounded-2xl border border-white/5 shadow-inner">
+                        <span class="text-gray-500 font-bold">HD:</span> ${p.hd} <br> 
+                        <span class="text-green-500 font-black">MỤC TIÊU:</span> ${p.goal}
                     </div>
-                    <button onclick="openModal(${l.id}, ${pIdx})" class="w-full py-4 bg-white text-black font-black rounded-2xl uppercase text-[10px]">🎯 Ghi Thông Số</button>
-                    <div class="mt-3 space-y-1">${(db.shots[`${l.id}-${pIdx}`] || []).map(s => `
-                        <div class="text-[9px] bg-black/40 p-2 rounded-lg flex justify-between items-center font-mono border border-white/5">
-                            <span>${s}</span>
-                            <button onclick="copySingle('${btoa(s)}')" class="text-blue-500 font-bold ml-2">COPY</button>
-                        </div>
-                    `).join('')}</div>
+                    <button onclick="openModal(${l.id}, ${pIdx})" class="w-full py-4 bg-white text-black font-black rounded-2xl uppercase text-xs tracking-tighter shadow-xl active:bg-gray-200">🎯 Ghi Thông Số</button>
+                    <div class="mt-4 space-y-2">
+                        ${(db.shots[`${l.id}-${pIdx}`] || []).map(s => `
+                            <div class="text-[10px] bg-black/40 p-3 rounded-xl flex justify-between items-center font-mono border border-white/5">
+                                <span class="opacity-80">${s}</span>
+                                <button onclick="copySingle('${btoa(s)}')" class="text-blue-500 font-black ml-2 uppercase text-[9px] p-1">Copy</button>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
             `).join('');
-            document.getElementById('main-scroll').scrollTop = 0;
+            document.getElementById('main-content').scrollTop = 0;
         }
 
         function toggleMastery(id) {
@@ -195,11 +220,11 @@
             else if(k==='N') {
                 let f = DATA.fields[inputState.step];
                 let val = inputState.buffer || "0";
-                if(f==='LP' && val !== "0") val += "A";
+                if(f==='LP' && val !== "0" && !val.includes('A')) val += "A";
                 inputState.data[f] = val;
                 if(inputState.step < 10) { inputState.step++; inputState.buffer = ""; updateModal(); }
                 else { saveShot(); }
-            } else { if(inputState.buffer.length < 6) inputState.buffer += k; }
+            } else { if(inputState.buffer.length < 7) inputState.buffer += k; }
             document.getElementById('display-val').innerText = inputState.buffer || "0";
         }
 
@@ -232,8 +257,8 @@
 
         function showDashboard() { renderDashboard(); }
         function closeModal() { document.getElementById('entry-modal').classList.remove('active'); }
-        function save() { localStorage.setItem('HoganApp_V6', JSON.stringify(db)); }
-        function resetApp() { if(confirm("Xóa hết dữ liệu?")) { localStorage.clear(); location.reload(); } }
+        function save() { localStorage.setItem('HoganApp_V7', JSON.stringify(db)); }
+        function resetApp() { if(confirm("Xóa toàn bộ dữ liệu?")) { localStorage.clear(); location.reload(); } }
 
         renderDashboard();
     </script>
