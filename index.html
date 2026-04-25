@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hogan Golf Grip Checklist</title>
+    <meta name="theme-color" content="#2d5a27">
+    <link rel="manifest" href="manifest.json">
+    
+    <style>
+        :root {
+            --primary: #2d5a27;
+            --bg: #f4f7f6;
+            --text: #333;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.1rem;
+            margin-top: 20px;
+            color: #555;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .checklist-item:last-child { border-bottom: none; }
+        input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-right: 15px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+        label { flex: 1; cursor: pointer; font-size: 0.95rem; }
+        .note {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            border-left: 4px solid var(--primary);
+        }
+        .timer {
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px dashed var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🏌️ Hogan Grip Checklist</h1>
+    
+    <div class="timer">Mục tiêu: 30 phút mỗi ngày [cite: 108]</div>
+
+    <h2>1. Tay Trái (Tay không thuận) [cite: 101]</h2>
+    <div class="checklist-item">
+        <input type="checkbox" id="l1">
+        <label for="l1">Gậy chạy ngang đốt trong cùng ngón trỏ & tỳ vào mu bàn tay [cite: 103]</label>
+    </div>
+    <div class="checklist-item">
+        <input type="checkbox" id="l2">
+        <label for="l2">Lực giữ chính ở 3 ngón: út, áp út, ngón giữa [cite: 110]</label>
+    </div>
+    <div class="checklist-item">
+        <input type="checkbox" id="l3">
+        <label for="l3">Đỉnh chữ V (ngón cái & trỏ) chỉ thẳng vào mắt phải [cite: 111]</label>
+    </div>
+
+    <h2>2. Tay Phải (Tay thuận) [cite: 123]</h2>
+    <div class="checklist-item">
+        <input type="checkbox" id="r1">
+        <label for="r1">Gậy nằm hoàn toàn ở các ngón tay (không vào lòng bàn tay) [cite: 133, 139]</label>
+    </div>
+    <div class="checklist-item">
+        <input type="checkbox" id="r2">
+        <label for="r2">Ngón út đặt chồng lên khe ngón trỏ & giữa tay trái [cite: 136, 145]</label>
+    </div>
+    <div class="checklist-item">
+        <input type="checkbox" id="r3">
+        <label for="r3">Đỉnh chữ V chỉ thẳng vào cằm [cite: 157]</label>
+    </div>
+
+    <h2>3. Kiểm tra sự gắn kết [cite: 156]</h2>
+    <div class="checklist-item">
+        <input type="checkbox" id="c1">
+        <label for="c1">Ngón cái trái nằm lọt khít trong lòng bàn tay phải [cite: 153, 155]</label>
+    </div>
+    <div class="checklist-item">
+        <input type="checkbox" id="c2">
+        <label for="c2">Hai tay hoạt động như một thể thống nhất [cite: 98, 167]</label>
+    </div>
+
+    <div class="note">
+        <strong>💡 Bài tập của Hogan:</strong> Tập vung gậy mà không để ngón trỏ và ngón cái tay phải chạm vào thân gậy để cảm nhận sự gắn kết[cite: 163, 167].
+    </div>
+</div>
+
+<script>
+    // Đăng ký Service Worker cho PWA
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js');
+    }
+
+    // Lưu trạng thái checklist vào LocalStorage
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(cb => {
+        const id = cb.id;
+        cb.checked = localStorage.getItem(id) === 'true';
+        cb.addEventListener('change', () => {
+            localStorage.setItem(id, cb.checked);
+        });
+    });
+</script>
+</body>
+</html>
