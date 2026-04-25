@@ -1,0 +1,15 @@
+{
+  "name": "Hogan Grip Checklist",
+  "short_name": "HoganGrip",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2d5a27",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3306/3306612.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
