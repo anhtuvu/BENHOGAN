@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Ben Hogan Pro - iOS Copy Fixed</title>
+    <title>Ben Hogan Pro - Numpad Upgrade</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1099/1099680.png">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; }
@@ -24,34 +23,28 @@
             padding-top: var(--safe-top); padding-bottom: var(--safe-bottom);
         }
 
-        .scroll-container {
-            flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 1rem;
-        }
+        .scroll-container { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 1rem; }
 
-        /* NÚT COPY ĐƯỢC TỐI ƯU HÓA CHO IPHONE */
         .btn-copy-shot {
             background: #1d4ed8; color: white; font-weight: 900;
-            padding: 12px 20px; border-radius: 12px; font-size: 12px;
-            text-transform: uppercase; letter-spacing: 1px;
-            box-shadow: 0 4px 14px 0 rgba(0, 118, 255, 0.39);
-            min-width: 85px; text-align: center;
+            padding: 12px 15px; border-radius: 12px; font-size: 11px;
+            text-transform: uppercase; min-width: 80px; text-align: center;
         }
         .btn-copy-shot:active { transform: scale(0.9); background: #3b82f6; }
         .btn-copy-shot.success { background: #059669 !important; }
 
         .phase-card { background: rgba(255,255,255,0.05); border-radius: 24px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid #30363d; }
         .shot-log-row {
-            background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 16px;
+            background: rgba(0, 0, 0, 0.4); padding: 10px; border-radius: 16px;
             display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.05); margin-top: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05); margin-top: 8px;
         }
 
         /* Modal & Numpad */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(12px); }
         .modal-overlay.active { display: flex; }
-        .numpad-btn { background: #21262d; border-radius: 16px; font-size: 1.6rem; font-weight: 800; padding: 1.3rem 0.5rem; color: #f0f6fc; }
+        .numpad-btn { background: #21262d; border-radius: 16px; font-size: 1.5rem; font-weight: 800; padding: 1.2rem 0.5rem; color: #f0f6fc; }
         
-        /* Helper cho iOS Copy */
         #ios-copy-helper { position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; opacity: 0; }
     </style>
 </head>
@@ -59,12 +52,12 @@
     <textarea id="ios-copy-helper" spellcheck="false" readonly></textarea>
 
     <div class="app-layout">
-        <div id="nav-header" class="p-4 border-bottom border-gray-800 hidden">
+        <div id="nav-header" class="p-4 border-b border-gray-800 hidden">
             <div class="flex justify-between items-center">
-                <button onclick="showDashboard()" class="text-blue-500 font-black text-sm">← MENU</button>
+                <button onclick="showDashboard()" class="text-blue-500 font-black text-xs uppercase tracking-widest">← Menu</button>
                 <div class="flex gap-2">
-                    <button id="prev-btn" class="bg-gray-800 px-4 py-2 rounded-xl text-[10px] font-black uppercase">Bài Trước</button>
-                    <button id="next-btn" class="bg-gray-800 px-4 py-2 rounded-xl text-[10px] font-black uppercase">Bài Tiếp</button>
+                    <button id="prev-btn" class="bg-gray-800 px-4 py-2 rounded-xl text-[10px] font-black uppercase">Trước</button>
+                    <button id="next-btn" class="bg-gray-800 px-4 py-2 rounded-xl text-[10px] font-black uppercase">Sau</button>
                 </div>
             </div>
         </div>
@@ -72,36 +65,37 @@
         <div class="scroll-container" id="main-content">
             <div id="dashboard">
                 <div class="text-center py-10">
-                    <h1 class="text-4xl font-black italic uppercase italic text-white">BEN HOGAN</h1>
+                    <h1 class="text-4xl font-black italic uppercase text-white tracking-tighter">BEN HOGAN</h1>
                     <p class="text-blue-500 font-bold text-[10px] tracking-[0.4em] mt-1 uppercase">Modern Fundamentals</p>
                 </div>
                 <div class="space-y-4" id="lesson-menu"></div>
             </div>
 
             <div id="lesson-detail" class="hidden">
-                <div class="mb-6"><h2 id="current-title" class="text-3xl font-black uppercase italic text-white"></h2></div>
+                <div class="mb-6"><h2 id="current-title" class="text-2xl font-black uppercase italic text-white"></h2></div>
                 <div id="phases-list"></div>
             </div>
         </div>
 
         <div class="p-5 bg-[#0d1117] border-t border-gray-800 flex gap-4">
-            <button id="btn-full-copy" onclick="copyFullSession()" class="flex-1 bg-blue-600 text-white font-black py-5 rounded-2xl uppercase text-sm shadow-xl active:scale-95 transition-all">Sao chép nhật ký</button>
-            <button onclick="resetApp()" class="bg-red-900/20 text-red-500 px-6 rounded-2xl font-bold border border-red-900/30">RESET</button>
+            <button id="btn-full-copy" onclick="copyFullSession()" class="flex-1 bg-blue-600 text-white font-black py-5 rounded-2xl uppercase text-xs shadow-xl active:scale-95 transition-all">Sao chép tất cả</button>
+            <button onclick="resetApp()" class="bg-red-900/20 text-red-500 px-5 rounded-2xl font-bold border border-red-900/30">XÓA</button>
         </div>
     </div>
 
     <div id="entry-modal" class="modal-overlay">
-        <div class="bg-[#161b22] border-2 border-blue-500 rounded-[40px] p-8 w-full max-w-[390px] mx-4">
-            <div class="flex justify-between mb-4 font-bold text-xs"><span id="modal-step" class="text-blue-500">BƯỚC 1/11</span><button onclick="closeModal()" class="text-gray-500 uppercase">Đóng</button></div>
+        <div class="bg-[#161b22] border-2 border-blue-600 rounded-[40px] p-6 w-full max-w-[390px] mx-4">
+            <div class="flex justify-between mb-4 font-black text-[10px]"><span id="modal-step" class="text-blue-500 uppercase">THÔNG SỐ 1/11</span><button onclick="closeModalAndSave()" class="text-red-500 uppercase">XONG & ĐÓNG</button></div>
             <h2 id="modal-field" class="text-3xl font-black uppercase text-center mb-4 italic text-white">CARRY</h2>
-            <div class="bg-black py-8 rounded-[25px] mb-8 text-center border-2 border-blue-900/50"><span id="display-val" class="text-6xl font-black text-blue-400">0</span></div>
+            <div class="bg-black py-6 rounded-[25px] mb-6 text-center border-2 border-blue-900/50 shadow-inner"><span id="display-val" class="text-6xl font-black text-blue-400">0</span></div>
             <div class="grid grid-cols-3 gap-3">
                 <button class="numpad-btn" onclick="press('7')">7</button><button class="numpad-btn" onclick="press('8')">8</button><button class="numpad-btn" onclick="press('9')">9</button>
                 <button class="numpad-btn" onclick="press('4')">4</button><button class="numpad-btn" onclick="press('5')">5</button><button class="numpad-btn" onclick="press('6')">6</button>
                 <button class="numpad-btn" onclick="press('1')">1</button><button class="numpad-btn" onclick="press('2')">2</button><button class="numpad-btn" onclick="press('3')">3</button>
-                <button class="numpad-btn" onclick="press('.')">.</button><button class="numpad-btn" onclick="press('0')">0</button><button class="numpad-btn" onclick="press('-')">-</button>
-                <button class="numpad-btn bg-red-900/40" onclick="press('C')">C</button>
-                <button class="numpad-btn bg-green-600 col-span-2 text-white shadow-lg" onclick="press('N')">NEXT →</button>
+                <button class="numpad-btn bg-gray-800" onclick="press('.')">.</button><button class="numpad-btn" onclick="press('0')">0</button><button class="numpad-btn bg-red-900/40" onclick="press('C')">DEL</button>
+                
+                <button class="numpad-btn bg-orange-600/80 text-white text-sm" onclick="press('B')">← QUAY LẠI</button>
+                <button class="numpad-btn bg-green-600 col-span-2 text-white shadow-lg text-sm" onclick="press('N')">TIẾP THEO →</button>
             </div>
         </div>
     </div>
@@ -118,41 +112,22 @@
             ]
         };
 
-        let db = JSON.parse(localStorage.getItem('HoganApp_V8')) || { shots: {}, mastered: [] };
+        let db = JSON.parse(localStorage.getItem('HoganApp_V9')) || { shots: {}, mastered: [] };
         let inputState = { step: 0, buffer: "", lessonId: null, phaseIdx: null, data: {} };
 
-        // HÀM COPY SIÊU CẤP CHO IOS
         function iosCopy(text, btn) {
             const helper = document.getElementById('ios-copy-helper');
             helper.value = text;
-            
-            // Logic select đặc biệt cho iOS
             if (navigator.userAgent.match(/ipad|iphone/i)) {
-                let range = document.createRange();
-                range.selectNodeContents(helper);
-                let selection = window.getSelection();
-                selection.removeAllRanges();
-                selection.addRange(range);
+                let range = document.createRange(); range.selectNodeContents(helper);
+                let sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
                 helper.setSelectionRange(0, 999999);
-            } else {
-                helper.select();
-            }
-
-            let success = false;
-            try {
-                success = document.execCommand('copy');
-            } catch (err) {}
-
+            } else { helper.select(); }
+            let success = document.execCommand('copy');
             if (success && btn) {
-                const originalText = btn.innerText;
-                btn.innerText = "COPIED!";
-                btn.classList.add('success');
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.classList.remove('success');
-                }, 1500);
+                const old = btn.innerText; btn.innerText = "OK!"; btn.classList.add('success');
+                setTimeout(() => { btn.innerText = old; btn.classList.remove('success'); }, 1200);
             }
-            window.getSelection().removeAllRanges();
         }
 
         function renderDashboard() {
@@ -161,12 +136,12 @@
             document.getElementById('nav-header').classList.add('hidden');
             const menu = document.getElementById('lesson-menu');
             menu.innerHTML = DATA.lessons.map(l => `
-                <div class="bg-[#161b22] border border-[#30363d] rounded-2xl p-6 flex justify-between items-center active:scale-95 transition-all shadow-lg" onclick="showLesson(${l.id})">
+                <div class="bg-[#161b22] border border-[#30363d] rounded-2xl p-6 flex justify-between items-center active:scale-95 shadow-lg" onclick="showLesson(${l.id})">
                     <div class="flex items-center gap-4">
-                        <div class="w-7 h-7 border-2 border-blue-500 rounded-lg flex items-center justify-center ${db.mastered.includes(l.id) ? 'bg-blue-500' : ''}" onclick="event.stopPropagation(); toggleMastery(${l.id})">
-                            ${db.mastered.includes(l.id) ? '<span class="text-white text-sm">✓</span>' : ''}
+                        <div class="w-6 h-6 border-2 border-blue-500 rounded flex items-center justify-center ${db.mastered.includes(l.id) ? 'bg-blue-500' : ''}" onclick="event.stopPropagation(); toggleMastery(${l.id})">
+                            ${db.mastered.includes(l.id) ? '<span class="text-white text-xs">✓</span>' : ''}
                         </div>
-                        <h3 class="font-black italic uppercase text-sm text-gray-200">Bài ${l.id}. ${l.title}</h3>
+                        <h3 class="font-black italic uppercase text-sm">Bài ${l.id}. ${l.title}</h3>
                     </div>
                     <span class="text-blue-500 font-black">→</span>
                 </div>
@@ -179,24 +154,18 @@
             document.getElementById('lesson-detail').style.display = 'block';
             document.getElementById('nav-header').classList.remove('hidden');
             document.getElementById('current-title').innerText = `${l.title}`;
-            
             document.getElementById('prev-btn').onclick = () => id > 1 && showLesson(id - 1);
             document.getElementById('next-btn').onclick = () => id < 5 && showLesson(id + 1);
-            document.getElementById('prev-btn').style.opacity = id === 1 ? "0.2" : "1";
-            document.getElementById('next-btn').style.opacity = id === 5 ? "0.2" : "1";
-
+            
             const list = document.getElementById('phases-list');
             list.innerHTML = l.phases.map((p, pIdx) => `
                 <div class="phase-card">
-                    <h4 class="font-black uppercase text-[12px] mb-4 text-blue-400 italic italic">Giai đoạn: ${p.name}</h4>
-                    <div class="text-[11px] text-gray-400 mb-6 bg-black/40 p-5 rounded-2xl border border-white/5 shadow-inner leading-relaxed">
-                        📌 ${p.hd} <br> <span class="text-green-500 font-black">MỤC TIÊU: ${p.goal}</span>
-                    </div>
-                    <button onclick="openModal(${l.id}, ${pIdx})" class="w-full py-5 bg-white text-black font-black rounded-2xl uppercase text-xs shadow-xl active:bg-gray-200">🎯 Ghi Thông Số</button>
-                    <div class="mt-6 space-y-3">
+                    <h4 class="font-black uppercase text-[11px] mb-3 text-blue-400">Giai đoạn: ${p.name}</h4>
+                    <button onclick="openModal(${l.id}, ${pIdx})" class="w-full py-5 bg-white text-black font-black rounded-2xl uppercase text-xs active:bg-gray-200">🎯 Ghi Thông Số</button>
+                    <div class="mt-5 space-y-2">
                         ${(db.shots[`${l.id}-${pIdx}`] || []).map(s => `
                             <div class="shot-log-row">
-                                <span class="text-[10px] font-mono opacity-80 overflow-hidden whitespace-nowrap">${s}</span>
+                                <span class="text-[9px] font-mono opacity-70">${s}</span>
                                 <button onclick="iosCopy('${s}', this)" class="btn-copy-shot">COPY</button>
                             </div>
                         `).join('')}
@@ -206,43 +175,74 @@
             document.getElementById('main-content').scrollTop = 0;
         }
 
-        function toggleMastery(id) {
-            if(db.mastered.includes(id)) db.mastered = db.mastered.filter(x => x !== id);
-            else db.mastered.push(id);
-            save(); renderDashboard();
-        }
-
         function openModal(lId, pIdx) {
             inputState = { step: 0, buffer: "", lessonId: lId, phaseIdx: pIdx, data: {} };
+            // Khởi tạo toàn bộ data là "0"
+            DATA.fields.forEach(f => inputState.data[f] = "0");
             document.getElementById('entry-modal').classList.add('active');
             updateModal();
         }
 
         function press(k) {
-            if(k==='C') inputState.buffer = "";
-            else if(k==='N') {
+            if(k==='C') {
+                inputState.buffer = "";
+            }
+            else if(k==='B') { // QUAY LẠI
+                if(inputState.step > 0) {
+                    inputState.step--;
+                    inputState.buffer = inputState.data[DATA.fields[inputState.step]].replace('A', '');
+                    updateModal();
+                }
+            }
+            else if(k==='N') { // TIẾP THEO
                 let f = DATA.fields[inputState.step];
                 let val = inputState.buffer || "0";
                 if(f==='LP' && val !== "0" && !val.includes('A')) val += "A";
                 inputState.data[f] = val;
-                if(inputState.step < 10) { inputState.step++; inputState.buffer = ""; updateModal(); }
-                else { saveShot(); }
-            } else { if(inputState.buffer.length < 8) inputState.buffer += k; }
+                
+                if(inputState.step < 10) {
+                    inputState.step++;
+                    inputState.buffer = "";
+                    updateModal();
+                } else {
+                    saveShot();
+                }
+            } else { 
+                if(inputState.buffer.length < 6) inputState.buffer += k; 
+            }
             document.getElementById('display-val').innerText = inputState.buffer || "0";
+        }
+
+        // Logic Xong & Đóng: Lưu những gì đã nhập, còn lại để là 0
+        function closeModalAndSave() {
+            // Lưu giá trị đang gõ dở vào step hiện tại
+            let currentF = DATA.fields[inputState.step];
+            inputState.data[currentF] = inputState.buffer || "0";
+            if(currentF==='LP' && inputState.data[currentF] !== "0") inputState.data[currentF] += "A";
+            
+            saveShot();
         }
 
         function saveShot() {
             const key = `${inputState.lessonId}-${inputState.phaseIdx}`;
             const str = DATA.fields.map(f => `${f}:${inputState.data[f]}`).join(" ");
             if(!db.shots[key]) db.shots[key] = [];
-            db.shots[key].unshift(str); save();
-            closeModal(); showLesson(inputState.lessonId);
+            db.shots[key].unshift(str);
+            save();
+            document.getElementById('entry-modal').classList.remove('active');
+            showLesson(inputState.lessonId);
         }
 
         function updateModal() {
-            document.getElementById('modal-step').innerText = `STEP ${inputState.step+1}/11`;
+            document.getElementById('modal-step').innerText = `THÔNG SỐ ${inputState.step+1}/11`;
             document.getElementById('modal-field').innerText = DATA.fields[inputState.step];
-            document.getElementById('display-val').innerText = "0";
+            document.getElementById('display-val').innerText = inputState.buffer || "0";
+        }
+
+        function toggleMastery(id) {
+            if(db.mastered.includes(id)) db.mastered = db.mastered.filter(x => x !== id);
+            else db.mastered.push(id);
+            save(); renderDashboard();
         }
 
         function copyFullSession() {
@@ -251,9 +251,8 @@
         }
 
         function showDashboard() { renderDashboard(); }
-        function closeModal() { document.getElementById('entry-modal').classList.remove('active'); }
-        function save() { localStorage.setItem('HoganApp_V8', JSON.stringify(db)); }
-        function resetApp() { if(confirm("Xóa toàn bộ dữ liệu?")) { localStorage.clear(); location.reload(); } }
+        function save() { localStorage.setItem('HoganApp_V9', JSON.stringify(db)); }
+        function resetApp() { if(confirm("Xóa hết dữ liệu?")) { localStorage.clear(); location.reload(); } }
 
         renderDashboard();
     </script>
