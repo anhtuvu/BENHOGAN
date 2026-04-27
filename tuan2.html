@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d5e3f">
+  <link rel="manifest" href="./manifest.json">
+  <title>Golf Tracking - Tuần 2</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #0d5e3f;
+      --primary-light: #1a8054;
+      --primary-dark: #084a2f;
+      --accent: #f59e0b;
+      --success: #10b981;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --border: #e5e7eb;
+      --text: #1f2937;
+      --text-secondary: #6b7280;
+      --spacing: 1rem;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f0f4f8 0%, #f9fafb 100%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: var(--spacing);
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 2rem var(--spacing);
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 4px 12px rgba(13, 94, 63, 0.15);
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      font-size: 0.95rem;
+      opacity: 0.95;
+    }
+
+    .week-goal {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      border-left: 4px solid var(--accent);
+    }
+
+    .week-goal strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .week-goal p {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .navigation {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      padding: 0.75rem 1.5rem;
+      border: 2px solid var(--border);
+      background: white;
+      color: var(--text);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(13, 94, 63, 0.1);
+    }
+
+    .nav-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .week-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      .week-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 0.75rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 4px;
+    }
+
+    .progress-text {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .btn-reset {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 1rem;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .btn-reset:hover {
+      background: #dc2626;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+    }
+
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      .days-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .day-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .day-card:hover {
+      box-shadow: 0 8px 16px rgba(13, 94, 63, 0.1);
+      border-color: var(--primary-light);
+    }
+
+    .day-header {
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, #f3f4f6 100%);
+      padding: 1rem var(--spacing);
+      border-bottom: 2px solid var(--border);
+    }
+
+    .day-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .day-progress {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .day-content {
+      padding: var(--spacing);
+    }
+
+    .exercise-item {
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .exercise-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .exercise-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      cursor: pointer;
+      padding: 0.5rem 0;
+      transition: all 0.2s ease;
+    }
+
+    .exercise-header:hover {
+      color: var(--primary);
+    }
+
+    .exercise-checkbox {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      cursor: pointer;
+      accent-color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .exercise-checkbox:checked ~ .exercise-name {
+      color: var(--success);
+      text-decoration: line-through;
+    }
+
+    .exercise-name {
+      font-weight: 600;
+      flex: 1;
+      transition: all 0.2s ease;
+    }
+
+    .expand-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.5rem 0;
+      transition: all 0.2s ease;
+    }
+
+    .expand-btn:hover {
+      color: var(--primary-light);
+    }
+
+    .expand-btn.open {
+      color: var(--accent);
+    }
+
+    .drill-detail {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 4px solid var(--accent);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .drill-detail.open {
+      display: block;
+      animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .drill-section {
+      margin-bottom: 1.25rem;
+    }
+
+    .drill-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .drill-section-title {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .drill-section-content {
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .drill-section-content ul,
+    .drill-section-content ol {
+      margin-left: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .drill-section-content li {
+      margin-bottom: 0.4rem;
+    }
+
+    .notes-section {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .notes-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      display: block;
+    }
+
+    .notes-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      resize: vertical;
+      min-height: 80px;
+      transition: all 0.2s ease;
+      color: var(--text);
+    }
+
+    .notes-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(13, 94, 63, 0.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem var(--spacing);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .pwa-install {
+      display: none;
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--primary);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(13, 94, 63, 0.3);
+      z-index: 1000;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .pwa-install.show {
+      display: block;
+    }
+
+    .pwa-install:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(13, 94, 63, 0.4);
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.5rem;
+      }
+
+      .pwa-install {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⛳ Golf Tracking</h1>
+    <p>Tuần 2: Nâng cao kỹ thuật, tích hợp toàn bộ</p>
+    <div class="week-goal">
+      <strong>Mục tiêu tuần:</strong>
+      <p>Tích hợp các bài drill từ tuần 1 vào swing thực tế. Tập 5 ngày với cường độ cao, kết hợp practice range và swing putt. Mục tiêu là hình thành muscle memory ổn định.</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="navigation">
+      <a href="./tuan1.html" style="text-decoration: none;">
+        <button class="nav-btn">← Tuần 1</button>
+      </a>
+      <button class="nav-btn active">Tuần 2</button>
+    </div>
+
+    <div class="week-stats">
+      <div class="stat-card">
+        <div class="stat-label">Tiến độ tuần</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="weekProgress" style="width: 0%"></div>
+        </div>
+        <div class="progress-text" id="weekProgressText">0/25 bài tập</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Hành động</div>
+        <button class="btn-reset" onclick="resetWeek()">Reset tuần</button>
+      </div>
+    </div>
+
+    <div class="days-grid" id="daysContainer"></div>
+
+    <footer>
+      <p>💪 Kết thúc 2 tuần huấn luyện! Hãy tiếp tục ghi lại tiến bộ hàng tuần.</p>
+    </footer>
+  </div>
+
+  <div class="pwa-install" id="installPrompt">
+    📲 Thêm ứng dụng vào màn hình chính
+  </div>
+
+  <script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+    }
+
+    // PWA Install
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installPrompt').classList.add('show');
+    });
+
+    document.getElementById('installPrompt').addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt = null;
+        document.getElementById('installPrompt').classList.remove('show');
+      }
+    });
+
+    // Drill Data - Week 2
+    const drills = {
+      1: {
+        name: 'Full swing integration',
+        setup: `• Stance chuẩn golf<br>• Cảm giác coil đã tạo từ tuần 1<br>• Tâm thần tập trung vào target`,
+        steps: `1. Thiết lập coil đúng từ backsing (Cross-arm + Wall drill)<br>2. Transition với lower body lead (Step drill)<br>3. Downswing giữ lag (Pump drill)<br>4. Follow-through clean, không flip tay`,
+        feeling: `• Lực từ chân lên qua thân<br>• Tay rơi tự nhiên xuống slot<br>• Cảm giác mạnh mẽ nhưng mượt`,
+        errors: `• Bắt đầu từ tay (early extension)<br>• Mất lag trước impact<br>• Sway hông trong backswing`,
+        goal: `• Swing đầy đủ với cơ bản vững<br>• Tạo consistency trong pattern`
+      },
+      2: {
+        name: 'Range balls x50 targets',
+        setup: `• Setup tại practice range<br>• Mục tiêu 50 shots với các khoảng cách khác nhau (30, 50, 100, 150 yards)`,
+        steps: `1. Warm-up với hybrid 10 shots<br>2. Drill 50 shots: 10 shots x5 targets<br>3. Track consistency từng khoảng<br>4. Note lỗi lặp lại & giải pháp`,
+        feeling: `• Tìm rhythm ổn định<br>• Cảm giác tay-cơ thể đồng bộ<br>• Confidence tăng dần`,
+        errors: `• Vội vã, không warm-up kỹ<br>• Không track kết quả<br>• Lặp lỗi cũ mà không correct`,
+        goal: `• Xây dựng consistency 50 shots<br>• Cải thiện accuracy từng yardage`
+      },
+      3: {
+        name: 'Short game: 20-yard pitch',
+        setup: `• 20 yards từ green<br>• Cầm wedge (SW hoặc GW)<br>• Compact setup, 60% trọng lượng ở chân phải`,
+        steps: `1. Pitch stroke với 3/4 swing<br>2. Tuân theo tempo từ tuần 1 (Pump drill tư tưởng)<br>3. 20 shots, tracking spin & distance<br>4. Adjust trajectory nếu cần`,
+        feeling: `• Ngắn gọn, mượt mà<br>• Không tay, dùng core rotation<br>• Cảm giác mềm mại trên turf`,
+        errors: `• Quá dài hoặc quá ngắn<br>• Flip tay ở finish<br>• Inconsistent tempo`,
+        goal: `• Master 20-yard pitch<br>• Đạt 70%+ accuracy trong 10 yards từ target`
+      },
+      4: {
+        name: 'Putt: 10-foot range test',
+        setup: `• Putt từ 10 feet<br>• Setup chuẩn putting stance<br>• Eye over ball, pendulum motion`,
+        steps: `1. 15 putts từ 10 feet, 5 direction khác nhau<br>2. Consistency stroke length & speed<br>3. Track make/miss & reason<br>4. Practice lag putt (30 feet) x5`,
+        feeling: `• Swing như pendulum, rocking shoulders<br>• Hands passive<br>• Cảm giác rhythm ổn định`,
+        errors: `• Tay active, manipulate`,br>• Decelerating vào impact<br>• Head movement`,
+        goal: `• Consistency stroke & pace<br>• 60%+ make rate từ 10 feet`
+      },
+      5: {
+        name: 'Mental focus: 9-hole simulation',
+        setup: `• Chọn 9 holes từ course quen<br>• Simulate scoring 18 holes (ghi chú 9 holes đầu)`,
+        steps: `1. Walk course, play 9 holes bình thường<br>2. Track score & quality shots<br>3. Ghi lại performance drill từ tuần 1-2<br>4. Note mental state & confidence level`,
+        feeling: `• Bình thạnh, flow state<br>• Tự tin trong motion<br>• Able to recover từ lỗi`,
+        errors: `• Overthink swing<br>• Frustration từ bad shots<br>• Loss of rhythm`,
+        goal: `• Play consistent 9-hole round<br>• Build confidence & mental game`
+      }
+    };
+
+    const schedule = [
+      {
+        day: 'Thứ Hai',
+        drills: [1, 2]
+      },
+      {
+        day: 'Thứ Ba',
+        drills: [2, 3]
+      },
+      {
+        day: 'Thứ Tư',
+        drills: [3, 4]
+      },
+      {
+        day: 'Thứ Năm',
+        drills: [4, 5]
+      },
+      {
+        day: 'Thứ Sáu',
+        drills: [1, 2, 3, 4, 5]
+      }
+    ];
+
+    function getStorageKey(day, drillId) {
+      return `golf_w2_${day}_${drillId}`;
+    }
+
+    function getNoteStorageKey(day) {
+      return `golf_w2_note_${day}`;
+    }
+
+    function createDayCard(dayData, dayIndex) {
+      const dayCard = document.createElement('div');
+      dayCard.className = 'day-card';
+
+      const dayNum = dayIndex + 1;
+      let dayProgress = 0;
+      let totalDrills = dayData.drills.length;
+
+      dayData.drills.forEach(drillId => {
+        if (localStorage.getItem(getStorageKey(dayData.day, drillId)) === 'true') {
+          dayProgress++;
+        }
+      });
+
+      const progressPercent = Math.round((dayProgress / totalDrills) * 100);
+
+      let exercisesHTML = dayData.drills.map(drillId => {
+        const drill = drills[drillId];
+        const isChecked = localStorage.getItem(getStorageKey(dayData.day, drillId)) === 'true';
+
+        return `
+          <div class="exercise-item">
+            <div class="exercise-header">
+              <input 
+                type="checkbox" 
+                class="exercise-checkbox" 
+                ${isChecked ? 'checked' : ''}
+                onchange="handleExerciseCheck(event, '${dayData.day}', ${drillId})"
+              />
+              <span class="exercise-name">${drill.name}</span>
+              <button class="expand-btn" onclick="toggleDrillDetail(event, ${drillId})">Chi tiết</button>
+            </div>
+            <div class="drill-detail" id="detail-${dayIndex}-${drillId}">
+              <div class="drill-section">
+                <div class="drill-section-title">🔹 Setup</div>
+                <div class="drill-section-content">${drill.setup}</div>
+              </div>
+              <div class="drill-section">
+                <div class="drill-section-title">🔹 Cách thực hiện</div>
+                <div class="drill-section-content">${drill.steps}</div>
+              </div>
+              <div class="drill-section">
+                <div class="drill-section-title">🔹 Cảm giác đúng</div>
+                <div class="drill-section-content">${drill.feeling}</div>
+              </div>
+              <div class="drill-section">
+                <div class="drill-section-title">🔹 Lỗi thường gặp</div>
+                <div class="drill-section-content">${drill.errors}</div>
+              </div>
+              <div class="drill-section">
+                <div class="drill-section-title">🔹 Mục tiêu đạt được</div>
+                <div class="drill-section-content">${drill.goal}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const savedNote = localStorage.getItem(getNoteStorageKey(dayData.day)) || '';
+
+      dayCard.innerHTML = `
+        <div class="day-header">
+          <div class="day-name">Ngày ${dayNum}: ${dayData.day}</div>
+          <div class="day-progress">${dayProgress}/${totalDrills} bài tập (${progressPercent}%)</div>
+        </div>
+        <div class="day-content">
+          ${exercisesHTML}
+          <div class="notes-section">
+            <label class="notes-label">📝 Ghi chú ngày hôm nay</label>
+            <textarea 
+              class="notes-input" 
+              placeholder="Ghi lại cảm nhận, tiến bộ, khó khăn..."
+              onchange="saveNote('${dayData.day}', this.value)"
+            >${savedNote}</textarea>
+          </div>
+        </div>
+      `;
+
+      return dayCard;
+    }
+
+    function handleExerciseCheck(event, day, drillId) {
+      const key = getStorageKey(day, drillId);
+      localStorage.setItem(key, event.target.checked ? 'true' : 'false');
+      updateProgress();
+    }
+
+    function toggleDrillDetail(event, drillId) {
+      const btn = event.target;
+      const dayIndex = event.target.closest('.day-card') ? 
+        Array.from(document.querySelectorAll('.day-card')).indexOf(event.target.closest('.day-card')) : 0;
+      const detailId = `detail-${dayIndex}-${drillId}`;
+      const detail = document.getElementById(detailId);
+      
+      if (detail) {
+        detail.classList.toggle('open');
+        btn.classList.toggle('open');
+      }
+    }
+
+    function saveNote(day, content) {
+      localStorage.setItem(getNoteStorageKey(day), content);
+    }
+
+    function updateProgress() {
+      let totalCompleted = 0;
+      let totalExercises = 0;
+
+      schedule.forEach(dayData => {
+        dayData.drills.forEach(drillId => {
+          totalExercises++;
+          if (localStorage.getItem(getStorageKey(dayData.day, drillId)) === 'true') {
+            totalCompleted++;
+          }
+        });
+      });
+
+      const percent = Math.round((totalCompleted / totalExercises) * 100);
+      document.getElementById('weekProgress').style.width = percent + '%';
+      document.getElementById('weekProgressText').textContent = `${totalCompleted}/${totalExercises} bài tập`;
+
+      // Update day cards
+      document.querySelectorAll('.day-card').forEach((card, idx) => {
+        const dayData = schedule[idx];
+        let dayProgress = 0;
+        dayData.drills.forEach(drillId => {
+          if (localStorage.getItem(getStorageKey(dayData.day, drillId)) === 'true') {
+            dayProgress++;
+          }
+        });
+        const progressPercent = Math.round((dayProgress / dayData.drills.length) * 100);
+        const progressText = card.querySelector('.day-progress');
+        if (progressText) {
+          progressText.textContent = `${dayProgress}/${dayData.drills.length} bài tập (${progressPercent}%)`;
+        }
+      });
+    }
+
+    function resetWeek() {
+      if (confirm('Bạn chắc chắn muốn reset toàn bộ tiến độ tuần 2?')) {
+        schedule.forEach(dayData => {
+          dayData.drills.forEach(drillId => {
+            localStorage.removeItem(getStorageKey(dayData.day, drillId));
+          });
+        });
+        updateProgress();
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('daysContainer');
+      schedule.forEach((dayData, idx) => {
+        container.appendChild(createDayCard(dayData, idx));
+      });
+      updateProgress();
+    });
+  </script>
+</body>
+</html>
